@@ -52,6 +52,6 @@ public class CmdbRepository {
     @PostConstruct
     private void injectIntoEngine() {
 //        SiteSelectMetric.cmdbRepository = this;
-        IsPublicServiceImpl.cmdbRepository = this;
+//        IsPublicServiceImpl.cmdbRepository = this;
     }
 }

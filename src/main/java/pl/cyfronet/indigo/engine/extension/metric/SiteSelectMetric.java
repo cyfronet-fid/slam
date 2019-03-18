@@ -52,43 +52,7 @@ public class SiteSelectMetric extends Metric<String> {
 
     public List<MetricOption> getOptions() {
         return getOptionsByGraphQl();
-//        return getOptionsByRest();
     }
-
-//    public List<MetricOption> getOptionsByRest() {
-//        JSONArray sites = null;
-//        JSONArray services = null;
-//        ArrayList<MetricOption> ret = new ArrayList<>();
-//        try {
-//            sites = cmdbRepository.get("service", "type", siteType.toString()).getJSONArray("rows");
-//            sites = cmdbRepository.get("sites", null).getJSONObject("data").getJSONArray("items");
-//            services = cmdbRepository.get("sites", null).getJSONObject("data").getJSONArray("items");
-//        } catch (Exception e) {
-//            //@TODO@ - provide message to frontend
-//            e.printStackTrace();
-//            return ret;
-//        }
-//
-//        for(int i=0; i < sites.length(); ++i) {
-//            MetricOption opt = new MetricOption();
-//            JSONObject site = sites.getJSONObject(i);
-//
-//            Map<String, Object> attrs = new HashMap<>();
-//
-//            String sitename = site.has("name") ? site.getString("name") : null;
-////            String sitename = site.getJSONObject("value").has("sitename") ? site.getJSONObject("value").getString("sitename") : null;
-//            String hostname = null;
-//
-//            attrs.put("sitename",  sitename);
-////            attrs.put("hostname",  hostname);
-//            attrs.put("label",  (sitename != null ? sitename : "?") + " : " + (hostname != null ? hostname : "?"));
-//            opt.setAttributes(attrs);
-//            opt.setValue(site.getString("id"));
-//            ret.add(opt);
-//        }
-//
-//        return ret;
-//    }
 
     public List<MetricOption> getOptionsByGraphQl() {
         JSONArray sites = null;
@@ -121,7 +85,7 @@ public class SiteSelectMetric extends Metric<String> {
                 opt.setAttributes(attrs);
                 // this was id from couchdb
 //                opt.setValue(site.getString("id"));
-                //this is service primarykey
+                //this is site primarykey
                 opt.setValue(site.getString("pkey"));
                 ret.add(opt);
             }

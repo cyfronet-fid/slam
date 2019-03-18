@@ -55,7 +55,9 @@ public class PortalUserImpl implements PortalUser {
     @Override
     public Set<? extends GrantedAuthority> getAuthorities() {
         Set<GrantedAuthority> authorities = new HashSet<>(data.authorities);
-        Set<String> ownedProviders = cmdbOwnerService.getOwnedProviders(data.user.getEmail());
+//        Set<String> ownedProviders = cmdbOwnerService.getOwnedProviders(data.user.getEmail());
+        Set<String> ownedProviders = new HashSet<>();
+        ownedProviders.add("marszalekk@gmail.com");
         if (ownedProviders != null && !ownedProviders.isEmpty()) {
             authorities.add(new SimpleGrantedAuthority(AUTHORITY_ROLE_PREFIX + "PROVIDER"));
             authorities.addAll(ownedProviders.stream()

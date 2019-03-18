@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.client.OAuth2RestOperations;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import pl.cyfronet.indigo.engine.extension.constraint.action.impl.IsPublicServiceImpl;
 import pl.cyfronet.indigo.engine.extension.metric.SiteSelectMetric;
 
 import javax.annotation.PostConstruct;
@@ -35,7 +36,7 @@ public class CmdbAppDbRepository {
     }
 
     public JSONObject get(String type) {
-        return get(type, null);
+        return get(type, "limit=10000");
     }
 
     public JSONObject get(String type, String params) {
@@ -57,12 +58,12 @@ public class CmdbAppDbRepository {
     public JSONObject getById(String type, String id) {
         String url = cmdbUrl + prefix + "/" + type + "/id/" + id;
         log.debug("Calling " + url);
-        return new JSONObject(restTemplate.getForObject(cmdbUrl + prefix + "/" + type + "/id/" + id, Map.class));
+        return new JSONObject(restTemplate.getForObject(cmdbUrl + prefix + "/" + type + "/" + id, Map.class));
     }
 
     @PostConstruct
     private void injectIntoEngine() {
         SiteSelectMetric.cmdbRepository = this;
-//        IsPublicServiceImpl.cmdbRepository = this;
+        IsPublicServiceImpl.cmdbRepository = this;
     }
 }

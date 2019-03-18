@@ -8,13 +8,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import pl.cyfronet.indigo.engine.extension.constraint.action.definition.IsPublicService;
+import pl.cyfronet.indigo.repository.CmdbAppDbRepository;
 import pl.cyfronet.indigo.repository.CmdbRepository;
 
 @Component
 @Scope("prototype")
 public class IsPublicServiceImpl extends QualifierImpl<IsPublicService, ActionContext> {
 
-    public static CmdbRepository cmdbRepository;
+    public static CmdbAppDbRepository cmdbRepository;
 
     @Override
     public boolean isAvailable() {
@@ -29,7 +30,7 @@ public class IsPublicServiceImpl extends QualifierImpl<IsPublicService, ActionCo
 
         boolean result = false;
         try {
-            result = (boolean) cmdbRepository.getById("service", id).getJSONObject("data").get("is_public_service");
+            result = (boolean) cmdbRepository.getById("services", id).getJSONObject("data").get("SiteEndpointInProduction");
         } catch (Exception e) {
             e.printStackTrace();
             return result;

@@ -26,11 +26,10 @@ public class ProviderService {
         providerIds = new HashMap<>();
 
         try {
-            JSONArray sites = cmdbRepository.get("service").getJSONArray("rows");
+            JSONArray sites = cmdbRepository.get("sites").getJSONObject("data").getJSONArray("items");
             for(int i = 0; i < sites.length(); ++i ) {
                 JSONObject site = sites.getJSONObject(i);
-                this.providerIds.put(site.getString("id"),
-                        site.getJSONObject("value").has("provider_id") ? site.getJSONObject("value").getString("provider_id") : "");
+                this.providerIds.put(site.getString("pkey"), site.getString("pkey"));
             }
             return this.providerIds;
         } catch (Exception e) {

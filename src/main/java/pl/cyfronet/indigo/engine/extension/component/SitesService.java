@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import pl.cyfronet.indigo.engine.extension.bean.Site;
+import pl.cyfronet.indigo.repository.CmdbAppDbRepository;
 import pl.cyfronet.indigo.repository.CmdbRepository;
 
 import java.util.HashMap;
@@ -20,7 +21,7 @@ import java.util.HashMap;
 public class SitesService {
 
     @Autowired
-    private CmdbRepository cmdbRepository;
+    private CmdbAppDbRepository cmdbRepository;
 
     private HashMap<String, Site> sites = null;
 
@@ -31,12 +32,12 @@ public class SitesService {
         sites = new HashMap<>();
 
         try {
-            JSONArray sites = cmdbRepository.get("service").getJSONArray("rows");
+            JSONArray sites = cmdbRepository.get("sites").getJSONObject("data").getJSONArray("items");
             for(int i = 0; i < sites.length(); ++i ) {
                 JSONObject site = sites.getJSONObject(i);
-                this.sites.put(site.getString("id"),
-                               Site.builder().id(site.getString("id"))
-                               .name(site.getJSONObject("value").has("sitename") ? site.getJSONObject("value").getString("sitename") : "")
+                this.sites.put(site.getString("pkey"),
+                               Site.builder().id(site.getString("pkey"))
+                               .name(site.has("name") ? site.getString("name") : "")
                                .build());
             }
             return this.sites;
