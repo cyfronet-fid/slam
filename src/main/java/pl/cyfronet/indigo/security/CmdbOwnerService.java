@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
+import pl.cyfronet.indigo.repository.CmdbAppDbRepository;
 import pl.cyfronet.indigo.repository.CmdbRepository;
 
 import java.util.*;
@@ -22,11 +23,11 @@ public class CmdbOwnerService {
 
     private final long refreshInterval;
 
-    private final CmdbRepository cmdbRepository;
+    private final CmdbAppDbRepository cmdbRepository;
 
     @Autowired
     public CmdbOwnerService(
-            CmdbRepository cmdbRepository,
+            CmdbAppDbRepository cmdbRepository,
             @Value("${cmdb.owner.refreshInterval:5000}") long refreshInterval) {
         this.cmdbRepository = cmdbRepository;
         this.refreshInterval = refreshInterval;
@@ -53,12 +54,11 @@ public class CmdbOwnerService {
                 Map<String, Set<String>> map = new HashMap<>();
 
                 // expects a response in a shape of: { rows: [ { id: <id>, doc: { data: { owners: [ <email1>, <email2>, ... ], ... } }, ... }, ... ] }
-                JSONArray providersJSONArray = cmdbRepository.get("provider", "include_docs=true").getJSONArray("rows");
+                JSONArray providersJSONArray = cmdbRepository.get("sites").getJSONObject("data").getJSONArray("items");
                 for (int i = 0; i < providersJSONArray.length(); i++) {
-                    JSONObject row = providersJSONArray.getJSONObject(i);
-                    JSONObject doc = row.getJSONObject("doc");
-                    JSONArray owners = doc.getJSONObject("data").optJSONArray("owners");
-                    String providerId = doc.getJSONObject("data").getString("name");
+                    JSONObject site = providersJSONArray.getJSONObject(i);
+                    JSONArray owners = site.optJSONArray("owners");
+                    String providerId = site.getString("name");
                     if (owners != null && owners.length() > 0) {
                         for (int j = 0; j < owners.length(); j++) {
                             String email = owners.getString(j);

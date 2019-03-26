@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import pl.cyfronet.indigo.repository.CmdbAppDbRepository;
 import pl.cyfronet.indigo.repository.CmdbRepository;
 
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import java.util.HashMap;
 public class ProviderService {
 
     @Autowired
-    private CmdbRepository cmdbRepository;
+    private CmdbAppDbRepository cmdbRepository;
 
     private HashMap<String, String> providerIds = null;
 
